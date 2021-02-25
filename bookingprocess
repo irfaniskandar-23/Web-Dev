@@ -1,0 +1,48 @@
+
+<?php
+include('cbssession.php');
+if(!session_id())
+  {
+    session_start();
+  }
+ include ('dbconnect.php');
+ $_SESSION=$_SESSION['c_ic'];
+ $fcar=$_POST['fcar'];
+ $fpdate=$_POST['fpdate'];
+ $frdate=$_POST['frdate'];
+
+//converting date value into ISO format and get numbe od days
+ $start=date('Y-m-d H:i:s',strtotime($fpdate));
+ $return=date('Y-m-d H:i:s',strtotime($frdate));
+
+$daydiff=abs(strtotime($frdate)-strtotime($fpdate));
+$numday=$daydiff/(60*60*24);
+
+//get vechicle price from db
+
+$sqlprice="SELECT v_price FROM tb_vehicle WHERE v_reg='$fcar'";
+$resultprice=mysqli_query($con,$sqlprice);
+
+$rowprice=mysqli_fetch_array($resultprice);
+
+
+//calculate total price
+
+$totalprice=$numday*($rowprice['v_price']);
+
+//insert new booking to table
+
+$sql="INSERT INTO tb_booking(b_customer,b_vehicle,b_bdate,b_rdate,b_totalprice,b_status )
+| VALUES | ('$cic','$fcar','$fpdate','$frdate','$totalprice','1')";
+
+//var_dump($sql)
+
+$result=mysqli_quesry($con,$sql);		
+
+
+mysqli_close($con);
+
+
+?>
+
+

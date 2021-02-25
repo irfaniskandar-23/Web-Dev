@@ -1,0 +1,31 @@
+<?php
+    include('cbssession.php');
+    if(!session_id())
+    {
+      session_start();
+    }
+
+ include('dbconnect.php');
+
+
+
+ if(isset($_GET['id']))
+ {
+ 	$bid=$_GET['id'];
+ }
+
+ //delete data
+
+
+$sql="DELETE FROM tb_booking WHERE b_id='$bid'";
+
+$result=mysqli($con,$sql);
+
+
+mysqli_close($con);
+
+
+header('location:manage.php');
+
+
+ ?>
